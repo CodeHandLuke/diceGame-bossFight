@@ -5,15 +5,15 @@ function runGame() {
 	playCharIntro();
 
 	let character = {
-		health: 250,
-		actionPoints: 85,
+		health: 135,
+		actionPoints: 100,
 		proficient: "",
 		weakness: "",
 		basic: ""
 	}
 
 	let computer = {
-		health: 300
+		health: 135
 	}
 
 	getCharStats(character);
@@ -146,7 +146,7 @@ runGame();
 		}
 
 		else if (computer.health <=0) {
-			alert("Congratulations! You have defeated the Old One! Treasure and glory is all yours, and you are now able to return to your own home.");
+			alert("Congratulations! You have defeated the Old One! Treasure and glory is all yours, and you are now able to return to your own homeworld.");
 			runGame();
 		}
 
@@ -240,7 +240,7 @@ runGame();
 
 				else {
 					character.actionPoints -= roll;
-					computer.health -= (roll / 1.25);
+					computer.health -= (roll * 1.25);
 					computerTurn (character, computer);;
 				}	
 			}	// end of while loop	
@@ -309,6 +309,7 @@ runGame();
 	} // end of playerHeal function
 
 	function computerTurn(character, computer) {
+			alert("The Old One has " + computer.health + " health points (hp).");
 			let attackDamage = 0;
 			// let attackStep = character.health - attackDamage; (not needed)
 			let healCalc = 0;
@@ -343,7 +344,7 @@ runGame();
 				checkBattleStats(character, computer); 
 			}
 			else if (roll === 4) {
-				if (computer.health <= 150){
+				if (computer.health <= 85){
 					healCalc = 1.5 * rollDie(30);
 					computer.health += healCalc;
 					checkBattleStats(character, computer); 
@@ -355,7 +356,7 @@ runGame();
 				}
 			}
 			else if (roll === 5) {
-				if (computer.health <= 150){
+				if (computer.health <= 85){
 					healCalc = 1.5 * rollDie(30);
 					computer.health += healCalc;
 					checkBattleStats(character, computer);
