@@ -1,9 +1,55 @@
 //DOM api. this helps front-end
 //doc get element id will be needed to code what alex sends me
+let playerName;
+
+function nameDelay() {
+  setTimeout(function(){ 
+  playerName = prompt("Choose a character name");
+	if (playerName === "") {
+		playerName = "Chosen One";
+		console.log(playerName);
+	}
+	else {
+		console.log(playerName);
+	}
+	storyIntro();
+  }, 250);  
+}
+
+nameDelay();
+// console.log(playerName);
+
+
+
+let story = document.getElementById("story");
+let storyDisplay = document.getElementById("storyDisplay");
+let storyFinished = false;
+console.log("second console.log" + playerName); //testing
+
+
+function storyIntro() {
+	let storyText = ['*You wake up in a cold, dark room, with no memory of how you arrived there. You hear a raspy voice asking you to identify yourself...', 'Welcome to the Crypt of The Old One, ' + playerName + '. You are most likely wondering how you got here?', '*You shake your head, looking around to adjust your eyes to the darkness. As your eyes acclimate, you make out a hunched over figure in the darkness, beckoning to you...', playerName + ', I hope you are not too disoriented. You have been summoned to this world because we have deemed you worthy to fight for the treasure and glory locked away in the crypt. However, you must defeat the Old One first, before you can claim your prize. Defeating the Old One is also the only means of returning to your home world. However, do not fret, ' + playerName + ', I will help you on your quest and assist you with your battle preparations.', 'You have three major stats that will help you in battle: Attack, Defense, and Heal. Attack determines how much damage you inflict if you attack for turn. Defense determines how much damage you can mitigate. Heal determines how much health you regain if you heal for turn.','I will train you in these three areas but since we are short on time, I can only teach you to be proficient in one of the three. Being proficient in a stat means you excel in it. For example, being proficient in Attack makes you do more damage, while being weak in Attack means you inflict reduced damage. Being proficient in Defense means you take less damage from the enemy. Being proficient in Heal means you gain more health when you heal for turn. You also regain some action points.', 'Do note that specific combinations of the proficient and basic stats have special bonuses, therefore, how you prioritize your stats carries some significance. Also, you can only choose one stat to be proficient in, so choose wisely! It is time to prepare you for your battle. Press the Start Game button to continue!', 'Press the Start Game button to begin!'];
+
+	let x = 0;
+	story.addEventListener('click', function() {
+	  storyDisplay.innerHTML = `<strong>${storyText[x]}</strong>`; //*template strings to adjust all values of a string
+	  if(x < storyText.length - 1) {
+	    x++;
+	  }
+	  if(x === storyText.length - 1){
+	  	startGame.style.visibility = "visible";
+	  }
+	}); 
+}
+
+let startGame = document.getElementById("startGame");
+document.getElementById("startGame").addEventListener("click", runGame);
+
+function restartGame() {
+	runGame();
+}
 
 function runGame() {
-	playCharIntro();
-
 	let character = {
 		health: 135,
 		actionPoints: 100,
@@ -25,30 +71,7 @@ function runGame() {
 
 } //end of runGame function
 
-runGame();
-
-	//This dice game will utilize user input to generate values as stats
-	function playCharIntro() {
-		alert("*You wake up in a cold, dark room, with no memory of how you arrived there... You hear a raspy voice asking you to identify yourself...");
-		let playerName = prompt("Choose a character name");
-			if (playerName === "") {
-				playerName = "Chosen One";
-			} //Here is where the player inputs their character name. If they don't input one, then they are given the generic name, "Chosen One".
-		alert("Welcome to the Crypt of The Old One, " + playerName + ". You are most likely wondering how you got here?");
-		alert("*You shake your head, looking around to adjust your eyes to the darkness. As your eyes acclimate, you make out a hunched over figure in the dark, beckoning to you...");
-		alert(playerName + ", I hope you are not too disoriented. You have been summoned to this world because we have deemed you worthy to fight for the treasure and glory locked away in the crypt. However, you must defeat the Old One first, before you can claim your prize.");
-		alert("Defeating the Old One is also the only means of returning to your home world. However, do not fret, " + playerName + " I will help you on your quest. I can assist you in your battle preparations.");
-		alert("You have three major stats that will help you in battle: Attack, Defense, and Heal.");
-		alert("'Attack' determines how much damage you inflict if you attack for turn.");
-		alert("'Defense' determines how much damage you can mitigate.");
-		alert("'Heal' determines how much health you regain if you heal for turn.");
-		alert("I will train you in these three areas but since we are short on time, I can only teach you to be proficient in one of the three. Being proficient in a stat means you excel in it.");
-		alert("For example, being proficient in 'Attack' makes you do more damage, while being weak in 'Attack' means you inflict reduced damage.")
-		alert("Being proficient in 'Defense' means you take less damage from the enemy.");
-		alert("Being proficient in 'Heal' means you gain more health when you heal for turn. You also regain some action points.");
-		alert("Be aware that you can only choose one stat to be proficient in, so choose wisely!");
-		alert("It is time to prepare you for your battle. After training you will be either proficient, basic, or weak in one of the three stats: attack, defense, heal. Choose how you want to prioritize.");
-	}
+// runGame();
 
 	function getCharStats(character) {
 		character.proficient = getCharProficent();
@@ -131,7 +154,7 @@ runGame();
 		alert("On your turn you will choose to either attack the boss to do damage or to heal to recover some hp.");
 		alert("If you choose to attack, you will decide to roll 1 of 6 dice: d30, d20, d10, d8, d6, or d4. Whatever result you roll is multiplied by your attack bonus and that damage is done to the boss.");
 		alert("If you choose to heal for your turn, you will roll 1 of 6 dice: d30, d20, d10, d8, d6, or d4. Whatever result you roll is multiplied by your heal bonus and that health is added back to your hp.");
-		alert("Keep in mind the die you determines how many action points you use. d30 costs the most action points while d4 costs the least.");
+		alert("Keep in mind the die you choose determines how many action points you use. d30 costs the most action points while d4 costs the least.");
 		alert("Being proficient in attack or heal can reduce action point costs.")
 		alert("You win by reducing the boss down to 0 hp!");
 		alert("You lose by being reduced to 0 hp. Be warned that if your action points are reduced to 0, you also lose the game!");
@@ -142,17 +165,17 @@ runGame();
 	function checkBattleStats(character, computer) {
 		if (character.health <= 0) { //*This isn't complete, be sure to try to create an accurate condition that ends the game when one player gets to 0 hp.
 			alert("GAME OVER. Your health has been reduced to 0, you lose :(");
-			runGame();
+			document.location.reload();
 		}
 
 		else if (computer.health <=0) {
 			alert("Congratulations! You have defeated the Old One! Treasure and glory is all yours, and you are now able to return to your own homeworld.");
-			runGame();
+			document.location.reload();
 		}
 
 		else if (character.actionPoints <=0) {
 			alert("GAME OVER. Your action points have been reduced to 0, game over :(");
-			runGame();
+			document.location.reload();
 		}
 
 		else {
@@ -173,6 +196,22 @@ runGame();
 	function playerTurn(character, computer) {
 		let roundedHealth = Math.round(character.health);
 		let roundedAction = Math.round(character.actionPoints);
+
+		if (character.proficient === "heal" && character.basic === "defense") {
+			alert("Due to your proficiency in 'heal' and basic training in 'defense', you gain 12 hp!");
+			character.health += 12;
+		}
+
+		else if (character.proficient === "defense" && character.basic === "heal") {
+			alert("Due to your proficiency in 'defense' and basic training in 'heal', you gain 8 hp!")
+			character.health += 8;
+		}
+
+		else if (character.proficient === "heal") {
+			alert("Due to your proficiency in 'heal', you gain 5 hp!")
+			character.health += 5;
+		}
+
 		let input = prompt("Which action (attack or heal) do you want to perform?");
 		switch (input) {
 			case "attack":
@@ -226,22 +265,31 @@ runGame();
 					commenceBattle(character, computer);
 				} // end of switch case
 
+				let damageDone;
+				let roundedDamage = Math.round(damageDone);
 				if (character.proficient === "attack") {
 					character.actionPoints -= (apCost / 2);
+					character.actionPoints += 5;
 					computer.health -= (roll * 2);
+					damageDone = roll * 2;
+					alert("You did " + damageDone + " damage!");
 					computerTurn (character, computer);
 				}
 
 				else if (character.weakness === "attack") {
 					character.actionPoints -= apCost;
-					computer.health -= (roll / 1.3);
-					computerTurn (character, computer);;
+					computer.health -= (roll);
+					damageDone = roll;
+					alert("You did " + damageDone + " damage!");
+					computerTurn (character, computer);
 				}
 
 				else {
 					character.actionPoints -= roll;
-					computer.health -= (roll * 1.25);
-					computerTurn (character, computer);;
+					computer.health -= (roll * 1.35);
+					damageDone = roll * 1.35;
+					alert("You did " + damageDone + " damage!");
+					computerTurn (character, computer);
 				}	
 			}	// end of while loop	
 	}
@@ -265,19 +313,19 @@ runGame();
 						roll += healRoll;
 						break;		
 					case "10":
-						attackRoll = rollDie(10);
+						healRoll = rollDie(10);
 						roll += healRoll;
 						break;
 					case "8":
-						attackRoll = rollDie(8);
+						healRoll = rollDie(8);
 						roll += healRoll;
 						break;
 					case "6":
-						attackRoll = rollDie(6);
+						healRoll = rollDie(6);
 						roll += healRoll;
 						break;			
 					case "4":
-						attackRoll = rollDie(4);
+						healRoll = rollDie(4);
 						roll += healRoll;
 						break;
 					default:
@@ -285,31 +333,39 @@ runGame();
 					commenceBattle(character, computer);
 				} // end of switch case
 
+				let healTotal;
+				let roundedHeal = Math.round(healTotal);
 				if (character.proficient === "heal") { //maybe add an incentive like small damage to computer
 					character.actionPoints -= (healChoice / 3);
-					character.actionPoints += 15;
-					character.health -= (roll * 2);
+					character.actionPoints += roll;
+					character.health += (roll * 3);
+					computer.health -= (roll * 1.35);
+					healTotal = roll * 3;
+					alert("You healed for " + healTotal + "! Due to your proficiency in 'heal', it did minor damage to the enemy!");
 					computerTurn (character, computer);
 				}
 
 				else if (character.weakness === "heal") {
 					character.actionPoints -= healChoice;
-					character.actionPoints += 5;
-					character.health += (roll / 1.3);
+					character.actionPoints += 1;
+					character.health += (roll);
+					healTotal = roll;
+					alert("You healed for " + healTotal + "!");
 					computerTurn (character, computer);
 				}
 
 				else {
 					character.actionPoints -= (healChoice / 2);
-					character.actionPoints += 10;
-					character.health += roll;
+					character.actionPoints += 2;
+					character.health += roll * 1.5;
+					healTotal = roll * 1.5;
+					alert("You healed for " + healTotal + "!");
 					computerTurn (character, computer);
 				}
 			}	//end of while loop	
 	} // end of playerHeal function
 
 	function computerTurn(character, computer) {
-			alert("The Old One has " + computer.health + " health points (hp).");
 			let attackDamage = 0;
 			// let attackStep = character.health - attackDamage; (not needed)
 			let healCalc = 0;
@@ -318,7 +374,7 @@ runGame();
 			let roundedAction = Math.round(character.actionPoints);
 			let roll = rollDie(6);
 			let oldOneHealth = computer.health;
-			if (oldOneHealth >= 150) {
+			if (oldOneHealth >= 85) {
 				alert("The Old One attacks and it is powerful as ever!");
 				roll;
 			}
@@ -328,12 +384,7 @@ runGame();
 				roll;
 			}
 
-			if (roll <= 3) {
-				attackDamage = 1.5 * rollDie(30);
-				character.health -= attackDamage;
-				checkBattleStats(character, computer);
-			}
-			else if (roll <= 3 && character.proficient === "defense") {
+			if (roll <= 3 && character.proficient === "defense") {
 				attackDamage = (1.5 * rollDie(30)) / 1.3;
 				character.health -= attackDamage;
 				checkBattleStats(character, computer);  
@@ -343,6 +394,13 @@ runGame();
 				character.health -= attackDamage;
 				checkBattleStats(character, computer); 
 			}
+
+			else if (roll <= 3) {
+				attackDamage = 1.5 * rollDie(30);
+				character.health -= attackDamage;
+				checkBattleStats(character, computer);
+			}
+
 			else if (roll === 4) {
 				if (computer.health <= 85){
 					healCalc = 1.5 * rollDie(30);
@@ -355,6 +413,7 @@ runGame();
 				checkBattleStats(character, computer); 
 				}
 			}
+
 			else if (roll === 5) {
 				if (computer.health <= 85){
 					healCalc = 1.5 * rollDie(30);
@@ -367,6 +426,7 @@ runGame();
 				checkBattleStats(character, computer); 
 				}
 			}
+
 			else { //Special Attack
 				attackDamage = 3 * rollDie(30);
 				character.health -= attackDamage;

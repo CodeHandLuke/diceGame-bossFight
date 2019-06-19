@@ -1,0 +1,112 @@
+body.style {
+	background-color: black;
+}
+
+/* Space out content a bit */
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.header,
+.marketing,
+.footer {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.container-narrow > hr {
+  margin: 30px 0;
+}
+
+.jumbotron {
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+}
+.jumbotron .btn {
+  padding: 14px 24px;
+  font-size: 21px;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  /* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    padding-right: 0;
+    padding-left: 0;
+  }
+  .header {
+    margin-bottom: 30px;
+  }
+  .jumbotron {
+    border-bottom: 0;
+  }
+}
+
+div.backgroundColorRed {
+	background-color: light-gray;
+}
+
+p.backgroundColorBlack {
+	background-color: black;
+}
+
+.button1Black {
+	background-color: black;
+	float: center;
+    position:absolute;
+    transition: .5s ease;
+    top: 50%;
+    left: -150%;
+}
+
+.button2Black {
+	background-color: black;
+	float: center;
+    position:absolute;
+    transition: .5s ease;
+    top: 50%;
+    left: 150%;
+}
+
+p.fontColor {
+	color: black;
+}
+
+.button1Red {
+	background-color: gray;
+	float: center;
+    position:absolute;
+    transition: .5s ease;
+    top: 50%;
+    left: -30%;
+}
+
+.button2Red {
+	background-color: gray;
+	float: center;
+    position:absolute;
+    transition: .5s ease;
+    top: 50%;
+    left: 45%;
+}
+
+.button3Red {
+	background-color: gray;
+	float: center;
+    position:absolute;
+    transition: .5s ease;
+    top: 50%;
+    left: 100%;
+}
+
+p.storyDisplay {
+
+}
+
+#startGame {
+	visibility: hidden;
+}
+
