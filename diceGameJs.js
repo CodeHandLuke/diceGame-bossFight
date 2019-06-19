@@ -1,23 +1,24 @@
+//DOM api. this helps front-end
+//doc get element id will be needed to code what alex sends me
+
 function runGame() {
 	playCharIntro();
 
 	let character = {
-		health: 200,
-		actionPoints: 100,
+		health: 250,
+		actionPoints: 85,
 		proficient: "",
 		weakness: "",
 		basic: ""
 	}
 
 	let computer = {
-		health: 300,
-		attackMult: 2,
-		defenseMult: 2,
-		healMult: 2,
+		health: 300
 	}
+
 	getCharStats(character);
 	displayRules();
-	commenceBattle(character, computer); //return a value from commence battle to rep who won, then create another function to check value and display who won.
+	commenceBattle(character, computer);
 
 
 
@@ -41,7 +42,10 @@ runGame();
 		alert("'Attack' determines how much damage you inflict if you attack for turn.");
 		alert("'Defense' determines how much damage you can mitigate.");
 		alert("'Heal' determines how much health you regain if you heal for turn.");
-		alert("I will train you in these three areas but since we are short on time, I can only teach you to be proficient in one of the three. Being proficient in a stat means you excel in it. For example, being proficient in 'Attack' makes you do more damage, while being weak in 'Attack' means you inflict reduced damage.");
+		alert("I will train you in these three areas but since we are short on time, I can only teach you to be proficient in one of the three. Being proficient in a stat means you excel in it.");
+		alert("For example, being proficient in 'Attack' makes you do more damage, while being weak in 'Attack' means you inflict reduced damage.")
+		alert("Being proficient in 'Defense' means you take less damage from the enemy.");
+		alert("Being proficient in 'Heal' means you gain more health when you heal for turn. You also regain some action points.");
 		alert("Be aware that you can only choose one stat to be proficient in, so choose wisely!");
 		alert("It is time to prepare you for your battle. After training you will be either proficient, basic, or weak in one of the three stats: attack, defense, heal. Choose how you want to prioritize.");
 	}
@@ -122,29 +126,53 @@ runGame();
 		}
 	}
 
-	function displayRules() {
+	function displayRules(character, computer) {
 		alert("Now that you have finished your training, I will explain the rules of combat. You will have a one on one, turn-based battle with the Old One.");
 		alert("On your turn you will choose to either attack the boss to do damage or to heal to recover some hp.");
-		alert("If you choose to attack, you will decide to roll 1 of 6 die: d30, d20, d10, d8, d6, or d4. Whatever result you roll is multiplied by your attack bonus and that damage is done to the boss.");
-		alert("However, do note that you expend action points (ap) depending on which die you roll. For example, if you roll the d30, it will cost 30 ap or if you roll d3 it will only cost 3 ap.");
-		alert("If you choose to heal for your turn, you will roll 1 of 6 die: d30, d20, d10, d8, d6, or d4. Whatever result you roll is multiplied by your heal bonus and that health is added back to your hp.");
+		alert("If you choose to attack, you will decide to roll 1 of 6 dice: d30, d20, d10, d8, d6, or d4. Whatever result you roll is multiplied by your attack bonus and that damage is done to the boss.");
+		alert("If you choose to heal for your turn, you will roll 1 of 6 dice: d30, d20, d10, d8, d6, or d4. Whatever result you roll is multiplied by your heal bonus and that health is added back to your hp.");
+		alert("Keep in mind the die you determines how many action points you use. d30 costs the most action points while d4 costs the least.");
+		alert("Being proficient in attack or heal can reduce action point costs.")
 		alert("You win by reducing the boss down to 0 hp!");
-		alert("You lose by being reduced to 0 hp. Be warned that if your action points are reduced to 0, you automatically lose half your life and can no longer heal!");
+		alert("You lose by being reduced to 0 hp. Be warned that if your action points are reduced to 0, you also lose the game!");
 		alert("You are now ready, prepare for battle!");
 	}
 
+
+	function checkBattleStats(character, computer) {
+		if (character.health <= 0) { //*This isn't complete, be sure to try to create an accurate condition that ends the game when one player gets to 0 hp.
+			alert("GAME OVER. Your health has been reduced to 0, you lose :(");
+			runGame();
+		}
+
+		else if (computer.health <=0) {
+			alert("Congratulations! You have defeated the Old One! Treasure and glory is all yours, and you are now able to return to your own home.");
+			runGame();
+		}
+
+		else if (character.actionPoints <=0) {
+			alert("GAME OVER. Your action points have been reduced to 0, game over :(");
+			runGame();
+		}
+
+		else {
+			commenceBattle(character, computer);
+		}
+	}
+
 	function commenceBattle(character, computer) {
-		alert("You have " + character.health + " health points (hp) and " + character.actionPoints + " action points (ap).");
+		let roundedHealth = Math.round(character.health);
+		let roundedAction = Math.round(character.actionPoints);
+		alert("You have " + roundedHealth + " health points (hp) and " + roundedAction + " action points (ap).");
 		while (character.health > 0 && computer.health > 0) {
 			playerTurn(character, computer);
 			computerTurn(character, computer);
-			//maybe add an if statement to see which player won
 		} // end of health while loop
-		if (character.health <= 0) { //*This isn't complete, be sure to try to create an accurate condition that ends the game when one player gets to 0 hp.
-			alert("Your health has been reduced to 0, game over :(");
 	} //end of commenceBattle function
 
 	function playerTurn(character, computer) {
+		let roundedHealth = Math.round(character.health);
+		let roundedAction = Math.round(character.actionPoints);
 		let input = prompt("Which action (attack or heal) do you want to perform?");
 		switch (input) {
 			case "attack":
@@ -160,11 +188,12 @@ runGame();
 	} //end of playerTurn function
 
 
-
 	function playerAttack(character, computer) {
 			let attackChoice = prompt("Choose which die you want to roll: type 30, 20, 10, 8, 6, or 4.");
 			let apCost = parseInt(attackChoice, 10);
 			let roll = 0;
+			let roundedHealth = Math.round(character.health);
+			let roundedAction = Math.round(character.actionPoints);
 			let isInputValid = false;
 			while (!isInputValid) {
 				switch (attackChoice) {
@@ -194,7 +223,7 @@ runGame();
 						break;
 					default:
 					alert('Invalid number, try again.');
-					break;
+					commenceBattle(character, computer);
 				} // end of switch case
 
 				if (character.proficient === "attack") {
@@ -218,9 +247,12 @@ runGame();
 	}
 
 	function playerHeal(character, computer) {
-			let healChoice = rollDie(prompt("Choose which die you want to roll: type 30, 20, 10, 8, 6, or 4."));
+			let healChoice = prompt("Choose which die you want to roll: type 30, 20, 10, 8, 6, or 4.");
 			let apCost = parseInt(healChoice, 10);
 			let roll = 0;
+			let roundedHealth = Math.round(character.health);
+			let roundedAction = Math.round(character.actionPoints);
+			let healRoll = 0;
 			let isInputValid = false;
 			while (!isInputValid) {
 				switch (healChoice) {
@@ -250,23 +282,26 @@ runGame();
 						break;
 					default:
 					alert('Invalid number, try again.');
-					break;
+					commenceBattle(character, computer);
 				} // end of switch case
 
-				if (character.proficient === "heal") {
-					character.actionPoints -= (healChoice / 2);
+				if (character.proficient === "heal") { //maybe add an incentive like small damage to computer
+					character.actionPoints -= (healChoice / 3);
+					character.actionPoints += 15;
 					character.health -= (roll * 2);
 					computerTurn (character, computer);
 				}
 
 				else if (character.weakness === "heal") {
 					character.actionPoints -= healChoice;
+					character.actionPoints += 5;
 					character.health += (roll / 1.3);
 					computerTurn (character, computer);
 				}
 
 				else {
-					character.actionPoints -= roll;
+					character.actionPoints -= (healChoice / 2);
+					character.actionPoints += 10;
 					character.health += roll;
 					computerTurn (character, computer);
 				}
@@ -278,37 +313,63 @@ runGame();
 			// let attackStep = character.health - attackDamage; (not needed)
 			let healCalc = 0;
 			// let healStep = computer.health + healCalc; (not needed)
-
+			let roundedHealth = Math.round(character.health);
+			let roundedAction = Math.round(character.actionPoints);
 			let roll = rollDie(6);
+			let oldOneHealth = computer.health;
+			if (oldOneHealth >= 150) {
+				alert("The Old One attacks and it is powerful as ever!");
+				roll;
+			}
+
+			else {
+				alert("The Old One attacks! However, it has been greatly damaged.");
+				roll;
+			}
+
 			if (roll <= 3) {
 				attackDamage = 1.5 * rollDie(30);
 				character.health -= attackDamage;
-				commenceBattle(character, computer);
+				checkBattleStats(character, computer);
 			}
 			else if (roll <= 3 && character.proficient === "defense") {
 				attackDamage = (1.5 * rollDie(30)) / 1.3;
 				character.health -= attackDamage;
-				commenceBattle(character, computer);  
+				checkBattleStats(character, computer);  
 			}
 			else if (roll <= 3 && character.weakness === "defense") {
 				attackDamage = (1.5 * rollDie(30)) * 1.2;
 				character.health -= attackDamage;
-				commenceBattle(character, computer); 
+				checkBattleStats(character, computer); 
 			}
 			else if (roll === 4) {
-				healCalc = 1.5 * rollDie(30);
-				computer.health += healCalc;
-				commenceBattle(character, computer); 
+				if (computer.health <= 150){
+					healCalc = 1.5 * rollDie(30);
+					computer.health += healCalc;
+					checkBattleStats(character, computer); 
+				}
+				else {
+				attackDamage = (1.5 * rollDie(30)) * 1.2;
+				character.health -= attackDamage;
+				checkBattleStats(character, computer); 
+				}
 			}
 			else if (roll === 5) {
-				healCalc += 1.5 * rollDie(30);
-				computer.health += healCalc;
-				commenceBattle(character, computer);
+				if (computer.health <= 150){
+					healCalc = 1.5 * rollDie(30);
+					computer.health += healCalc;
+					checkBattleStats(character, computer);
+				}
+				else {
+				attackDamage = (1.5 * rollDie(30)) * 1.2;
+				character.health -= attackDamage;
+				checkBattleStats(character, computer); 
+				}
 			}
 			else { //Special Attack
 				attackDamage = 3 * rollDie(30);
 				character.health -= attackDamage;
-				commenceBattle(character, computer);  
+				checkBattleStats(character, computer);  
 			}
 	} //end of computerTurn function
 
