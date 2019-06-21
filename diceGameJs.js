@@ -2,9 +2,13 @@
 //doc get element id will be needed to code what alex sends me
 let playerName;
 
-function nameDelay() {
-  setTimeout(function(){ 
-  playerName = prompt("Choose a character name");
+function forceReload() {
+	location.reload(true);
+}
+
+
+function getCharName() {
+	playerName = prompt("Choose a character name");
 	if (playerName === "") {
 		playerName = "Chosen One";
 		console.log(playerName);
@@ -12,6 +16,11 @@ function nameDelay() {
 	else {
 		console.log(playerName);
 	}
+}
+
+function nameDelay() {
+  setTimeout(function(){ 
+  	getCharName();
 	storyIntro();
   }, 250);  
 }
@@ -46,6 +55,7 @@ let startGame = document.getElementById("startGame");
 document.getElementById("startGame").addEventListener("click", runGame);
 
 function restartGame() {
+	forceReload();
 	runGame();
 }
 
@@ -165,17 +175,20 @@ function runGame() {
 	function checkBattleStats(character, computer) {
 		if (character.health <= 0) { //*This isn't complete, be sure to try to create an accurate condition that ends the game when one player gets to 0 hp.
 			alert("GAME OVER. Your health has been reduced to 0, you lose :(");
-			document.location.reload();
+			restartGame();
+			location.reload(true);
 		}
 
 		else if (computer.health <=0) {
 			alert("Congratulations! You have defeated the Old One! Treasure and glory is all yours, and you are now able to return to your own homeworld.");
-			document.location.reload();
+			restartGame();
+			location.reload(true);
 		}
 
 		else if (character.actionPoints <=0) {
 			alert("GAME OVER. Your action points have been reduced to 0, game over :(");
-			document.location.reload();
+			restartGame();
+			location.reload(true);
 		}
 
 		else {
